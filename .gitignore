@@ -1,0 +1,14 @@
+*.lock
+*.bak
+*.backup
+*.backup-*
+*.old
+
+.cache/
+cache/
+thumbs/
+thumbnails/
+
+keyring.json
+
+.DS_Store

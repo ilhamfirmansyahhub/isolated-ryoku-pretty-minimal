@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Ryoku update protection
+# Updates are intentionally disabled on this system.
+
+if [ "$1" = "update" ]; then
+    printf "\nRyoku updates are LOCKED on this system.\n"
+    printf "Automatic and manual Ryoku updates are disabled.\n\n"
+    exit 1
+fi
+
+if [ "$1" = "status" ] && [ "$2" = "--json" ]; then
+    installed="$(pacman -Q ryoku 2>/dev/null | awk '{print $2}')" 
+    [ -z "$installed" ] && installed="local"
+
+    printf '{"available":false,"pendingUpdates":0,"installedVersion":"%s","latestVersion":"%s","release":"","channelRelease":"","releaseName":"","channelReleaseName":"","channel":"main","updates":[],"recent":[],"packages":[]}' "$installed" "$installed"
+    exit 0
+fi
+
+exec /usr/bin/ryoku "$@"

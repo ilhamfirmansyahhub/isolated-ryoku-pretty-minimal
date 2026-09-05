@@ -1,0 +1,5 @@
+gpu-screen-recorder
+hyprland
+quickshell
+ryoku-desktop
+wf-recorder

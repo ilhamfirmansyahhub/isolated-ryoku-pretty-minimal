@@ -1,0 +1,13 @@
+{
+    "markImage": "",
+    "markText": "力",
+    "markTint": true,
+    "name": "Ryoku",
+    "reloadCover": {
+        "bytes": 21922,
+        "enabled": false,
+        "kind": "image",
+        "name": "game.png",
+        "path": "/home/ilham/.local/share/ryoku/reload-cover/a72bea33e1e00cfae8e9d2d618881d07784b4c5f29e7ef886c96ea1fc88181fb.png"
+    }
+}

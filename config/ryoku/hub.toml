@@ -1,0 +1,4 @@
+[ui]
+  section = "widgets"
+  update_interval = "off"
+  advanced = "1"

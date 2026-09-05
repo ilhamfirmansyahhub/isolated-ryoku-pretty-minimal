@@ -1,0 +1,3 @@
+ryoku-desktop = 0.54.3.r3225.g4911412-2
+ryoku-shell   = 0.54.3.r3225.g4911412-1
+ryomotion     = 1.5.0-11
