@@ -1,4 +1,4 @@
-# Isolated Ryoku Pretty Minimal
+# Isolated Ryoku Pretty Minimal I guess LMAO
 
 Personal snapshot of my customized Ryoku desktop configuration.
 
