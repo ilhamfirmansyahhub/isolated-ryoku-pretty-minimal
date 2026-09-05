@@ -2,17 +2,23 @@
 
 Personal snapshot of my customized Ryoku desktop configuration.
 
-This project is a small personal modification of the original [Ryoku](https://github.com/neur0map/ryoku-arch) project. The goal is not to replace or fork Ryoku completely, but to keep my own preferred configuration and visual changes on top of the original Ryoku experience.
+This project is a small personal modification of the original [Ryoku](https://github.com/neur0map/ryoku-arch) project. The goal is not to replace Ryoku completely, but to keep the original Ryoku experience while applying my own preferred configuration, appearance, and workflow changes.
 
-I customized it according to my own taste, mainly focusing on a cleaner, more minimal setup and a few personal workflow and UI adjustments.
+I customized this setup according to my own taste, mainly focusing on a cleaner and more minimal desktop, a simplified bar, a smoother wallpaper picker, and other small UI/workflow adjustments.
 
 ## Why this repository exists
 
-I am a **distro hopper**. I frequently experiment with different Linux distributions, reinstall systems, and change my setup while trying new environments.
+I am a **distro hopper**. I frequently try different Linux distributions, reinstall systems, change desktop environments, and rebuild my setup while experimenting.
 
-Because of that, I maintain this repository as a personal backup and restore point. Instead of rebuilding my preferred Ryoku environment from scratch after every reinstall, I can reinstall my base system, install Ryoku, clone this repository, and restore my personal configuration.
+That makes a personal backup extremely useful. Instead of rebuilding my preferred Ryoku environment from scratch after every reinstall, I can:
 
-The repository is therefore primarily a **personal configuration backup**, not an official Ryoku distribution or replacement.
+1. Install a fresh Linux system.
+2. Install Ryoku.
+3. Clone this repository.
+4. Run the restore script.
+5. Reboot and continue using my preferred setup.
+
+This repository is therefore primarily a **personal configuration backup and restore point**, not an official Ryoku distribution, fork, or replacement.
 
 ## Based on
 
@@ -20,9 +26,11 @@ This setup is based on the original Ryoku project by neur0map:
 
 - Original project: https://github.com/neur0map/ryoku-arch
 
-Ryoku itself should be installed separately before applying this configuration.
+Please refer to the original project for Ryoku's own installation, architecture, packages, and documentation. This repository only contains my personal layer on top of it.
 
 ## What is included
+
+The snapshot contains configuration and customization files such as:
 
 - Ryoku configuration
 - Custom Quickshell configuration
@@ -30,53 +38,222 @@ Ryoku itself should be installed separately before applying this configuration.
 - Customized wallpaper picker
 - Hyprland Ryoku scripts
 - Fish configuration
-- Qt theme configuration
+- Qt5/Qt6 configuration
 - Kvantum theme
 - btop theme
 - tmux colors
 - Ryogami wallpaper configuration
 - User systemd units
-- Ryoku update-lock wrapper
-- Ryoku version reference used for this snapshot
+- Local `ryoku` wrapper used to keep Ryoku updates locked
+- `RYOKU-VERSION.txt` with the Ryoku versions used when this snapshot was created
+- `packages.txt` as a reference for packages used by this setup
 
 ## What is intentionally excluded
 
+The repository intentionally does **not** contain sensitive or temporary data, including:
+
 - credentials
 - keyring data
+- API tokens
 - caches
 - wallpaper thumbnails
 - temporary files
 - old backups
-- machine-specific runtime data
+- machine-specific runtime data that should not be shared
 
 ## Ryoku version
 
-The configuration was captured against the Ryoku versions recorded in `RYOKU-VERSION.txt`.
+This configuration was captured against the versions recorded in [`RYOKU-VERSION.txt`](RYOKU-VERSION.txt).
 
-This repository is intended to preserve the setup I personally use, so compatibility with other Ryoku versions is not guaranteed.
+The snapshot was made for my personal installation, so compatibility with a different Ryoku version is not guaranteed.
 
-## Installation
+I also intentionally keep Ryoku updates locked on my system. The repository therefore preserves the configuration around the Ryoku version I was using rather than assuming that the latest Ryoku release should always be used.
 
-Clone the repository:
+## Requirements
+
+Before running the restore script, make sure the target system has:
+
+- A working Linux installation with a user session
+- Ryoku already installed
+- Fish shell
+- Git
+- `systemd --user` available for user services
+- The packages referenced by [`packages.txt`](packages.txt), when they are not already provided by the Ryoku installation
+
+The restore script is a **configuration restore script**. It does not perform a full operating-system installation and it does not replace the official Ryoku installer.
+
+## Installation / restore process
+
+The intended workflow after a reinstall is:
+
+### 1. Install the base system
+
+Install your Linux distribution normally and make sure your graphical session, network, user account, and package manager are working.
+
+This repository was created around my personal CachyOS/Ryoku workflow, but the configuration may work elsewhere if the required paths and packages exist.
+
+### 2. Install Ryoku
+
+Install the original Ryoku project first:
+
+https://github.com/neur0map/ryoku-arch
+
+For the closest match to this snapshot, check [`RYOKU-VERSION.txt`](RYOKU-VERSION.txt) and use a compatible Ryoku version.
+
+### 3. Make sure the required tools exist
+
+At minimum:
+
+```fish
+sudo pacman -S git fish
+```
+
+If your installation does not already provide the packages used by this configuration, consult `packages.txt` and install the missing ones.
+
+The current package reference is:
+
+```text
+gpu-screen-recorder
+hyprland
+quickshell
+ryoku-desktop
+wf-recorder
+```
+
+### 4. Clone this repository
+
+Using HTTPS:
 
 ```fish
 git clone https://github.com/ilhamfirmansyahhub/isolated-ryoku-pretty-minimal.git
 cd isolated-ryoku-pretty-minimal
+```
+
+Or using SSH:
+
+```fish
+git clone git@github.com:ilhamfirmansyahhub/isolated-ryoku-pretty-minimal.git
+cd isolated-ryoku-pretty-minimal
+```
+
+### 5. Review the restore script
+
+Before applying anything, it is recommended to read `install.fish`:
+
+```fish
+cat install.fish
+```
+
+The script copies the repository's configuration trees into the corresponding paths under `~/.config/` and restores the local `ryoku` wrapper into `~/.local/bin/ryoku`.
+
+It does **not** intentionally copy credentials, caches, wallpaper thumbnails, or the excluded runtime files.
+
+### 6. Run the restore script
+
+Because the script is written for Fish, run:
+
+```fish
+chmod +x install.fish
 ./install.fish
 ```
 
-Then reboot.
+Or explicitly:
 
-## Important
+```fish
+fish install.fish
+```
 
-This repository assumes Ryoku itself is already installed.
+The script will:
 
-It restores my configuration on top of an existing Ryoku installation.
+- restore `~/.config/ryoku`
+- restore the selected custom Quickshell files
+- restore Fish, Hyprland, Qt, Kvantum, btop, tmux, and Ryogami configuration
+- restore user systemd units
+- restore the local `ryoku` wrapper
+- reload the user systemd manager
+- attempt to restart `ryoku-shell.service`
 
-Because this is a personal distro-hopping backup, some parts of the configuration may be specific to my hardware, system layout, installed packages, or personal preferences.
+### 7. Reboot
 
-Always review `install.fish` before running it on another machine.
+A reboot is recommended after the restore so the graphical session starts cleanly with the restored configuration.
+
+## Important compatibility notes
+
+This repository is a **personal dotfiles/configuration snapshot**, not a universal installer.
+
+Some files can depend on:
+
+- the installed Ryoku version
+- the installed package versions
+- Hyprland/Quickshell behavior
+- filesystem paths
+- hardware and GPU setup
+- display names and monitor layout
+- user services
+- personal wallpaper locations
+- personal preferences
+
+For that reason, do not blindly copy the repository to an unrelated machine without reviewing the files first.
+
+If something breaks after a future Ryoku update, first compare the installed Ryoku version with `RYOKU-VERSION.txt` and inspect the custom files before assuming the base Ryoku installation is broken.
+
+## Restoring on a completely fresh machine
+
+A practical distro-hopping restore sequence is:
+
+```text
+Fresh Linux installation
+        ↓
+Install required drivers / base packages
+        ↓
+Install Ryoku
+        ↓
+Clone this repository
+        ↓
+Review install.fish
+        ↓
+Run install.fish
+        ↓
+Reboot
+        ↓
+Ryoku + my personal customizations restored
+```
+
+This keeps the responsibilities separated:
+
+- **Ryoku upstream** provides the operating environment and original desktop.
+- **This repository** provides my personal modifications and preferences.
+- **The Linux distribution** provides the base system and hardware support.
+
+## Keeping the backup up to date
+
+When I make a configuration change that I want to keep:
+
+```fish
+cd ~/isolated-ryoku-pretty-minimal
+git status
+git add -A
+git commit -m "Update Ryoku configuration"
+git push
+```
+
+This turns the repository into a running history of my preferred setup instead of a single static backup.
+
+## For future recovery
+
+The most important files to understand are:
+
+- `install.fish` — restore procedure
+- `RYOKU-VERSION.txt` — Ryoku version reference
+- `packages.txt` — package reference
+- `config/` — personal configuration files
+- `config/local-bin/ryoku` — local Ryoku update-lock wrapper
+- `patches/pacman/ryoku-ignorepkg.conf` — pacman `IgnorePkg` reference used to lock Ryoku updates
+
+Reading those files should make the repository understandable even after a long period away from it.
 
 ## Personal note
 
-This repository exists mainly for convenience: whenever I reinstall a distribution or move to another Linux setup, I want a reliable place to restore the Ryoku environment that I personally enjoy using.
+This repository exists because I enjoy experimenting with Linux and changing distributions. As a distro hopper, I would rather spend my time trying a new system than rebuilding the same desktop configuration manually every time.
+
+So this is my personal **Ryoku restore point**: a small layer of customization built on top of the original Ryoku project, preserved so that I can easily recreate the environment I like after the next reinstall.
