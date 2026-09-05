@@ -48,6 +48,21 @@ The snapshot contains configuration and customization files such as:
 - `RYOKU-VERSION.txt` with the Ryoku versions used when this snapshot was created
 - `packages.txt` as a reference for packages used by this setup
 
+## Ryoku update feature
+
+The original Ryoku update feature has been intentionally **removed/disabled from my customized setup**.
+
+I do not want the Ryoku environment to display update prompts or perform the normal Ryoku update flow. My goal is to keep the installed Ryoku version stable and reproducible rather than automatically moving to newer Ryoku builds.
+
+This is implemented in two parts:
+
+1. A local `ryoku` wrapper is installed at `~/.local/bin/ryoku`. The wrapper blocks the normal `ryoku update` command instead of allowing the update flow to run.
+2. A pacman configuration reference is provided in `patches/pacman/ryoku-ignorepkg.conf` with `IgnorePkg = ryoku-*`, so the Arch package manager can keep Ryoku packages excluded from normal system upgrades.
+
+The normal system package manager is still available. My intended workflow is to update the rest of the system manually with `sudo pacman -Syu` while keeping Ryoku itself locked.
+
+This is a personal preference for this configuration and is **not a modification to the original Ryoku project**.
+
 ## What is intentionally excluded
 
 The repository intentionally does **not** contain sensitive or temporary data, including:
@@ -67,7 +82,7 @@ This configuration was captured against the versions recorded in [`RYOKU-VERSION
 
 The snapshot was made for my personal installation, so compatibility with a different Ryoku version is not guaranteed.
 
-I also intentionally keep Ryoku updates locked on my system. The repository therefore preserves the configuration around the Ryoku version I was using rather than assuming that the latest Ryoku release should always be used.
+I intentionally keep Ryoku updates locked on my system. The repository therefore preserves the configuration around the Ryoku version I was using rather than assuming that the latest Ryoku release should always be used.
 
 ## Requirements
 
@@ -173,7 +188,19 @@ The script will:
 - reload the user systemd manager
 - attempt to restart `ryoku-shell.service`
 
-### 7. Reboot
+### 7. Restore the pacman update lock
+
+The repository contains `patches/pacman/ryoku-ignorepkg.conf` as the reference for the pacman rule used by this setup:
+
+```text
+IgnorePkg = ryoku-*
+```
+
+Apply that rule to `/etc/pacman.conf` on a new installation if you want the same Ryoku update-lock behavior.
+
+The exact system-level pacman configuration is kept as a separate patch/reference rather than replacing the entire `/etc/pacman.conf`, because that file is machine-specific.
+
+### 8. Reboot
 
 A reboot is recommended after the restore so the graphical session starts cleanly with the restored configuration.
 
@@ -213,6 +240,8 @@ Clone this repository
 Review install.fish
         ↓
 Run install.fish
+        ↓
+Restore pacman IgnorePkg rule
         ↓
 Reboot
         ↓
