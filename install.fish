@@ -123,5 +123,4 @@ systemctl --user restart ryoku-shell.service 2>/dev/null
 echo
 echo "==> Done."
 echo "Reboot recommended."
-echo "
 echo "To use a login manager later, install/configure it yourself and restore graphical.target if needed."
