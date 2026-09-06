@@ -91,6 +91,23 @@ if test -f "$REPO/config/local-bin/ryoku"
 end
 
 # ─────────────────────────────────────────────
+# Login / display manager
+# ─────────────────────────────────────────────
+# This repository does not install or configure a login manager.
+# Disable Ryoku's SDDM setup so the user can install and configure
+# their own display manager / login screen separately.
+
+if command -q systemctl; and test (id -u) -eq 0
+    echo "  [SKIP] SDDM handling requires the restore script to be run as a user"
+else if command -q sudo; and systemctl list-unit-files sddm.service >/dev/null 2>&1
+    echo
+    echo "==> Disabling SDDM login manager..."
+    sudo systemctl disable --now sddm.service 2>/dev/null
+    sudo systemctl set-default multi-user.target 2>/dev/null
+    echo "  [OK] SDDM disabled; login manager left for manual setup"
+end
+
+# ─────────────────────────────────────────────
 # Reload
 # ─────────────────────────────────────────────
 
@@ -106,3 +123,5 @@ systemctl --user restart ryoku-shell.service 2>/dev/null
 echo
 echo "==> Done."
 echo "Reboot recommended."
+echo "
+echo "To use a login manager later, install/configure it yourself and restore graphical.target if needed."
