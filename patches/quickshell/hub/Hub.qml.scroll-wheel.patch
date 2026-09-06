@@ -1,0 +1,23 @@
+--- a/Hub.qml
++++ b/Hub.qml
+@@
+     contentHeight: nav.height
+     clip: true
++    WheelHandler {
++        onWheel: function(event) {
++            var delta = event.angleDelta.y !== 0
++                ? event.angleDelta.y
++                : event.pixelDelta.y
++
++            navFlick.contentY = Math.max(
++                0,
++                Math.min(
++                    navFlick.contentHeight - navFlick.height,
++                    navFlick.contentY - delta * 1.0
++                )
++            )
++
++            event.accepted = true
++        }
++    }
+     ScrollBar.vertical: ScrollRail { policy: ScrollBar.AsNeeded }
